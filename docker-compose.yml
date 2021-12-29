@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  ## Start - TimeSheetProject definition
+  app:
+    build: .
+    depends_on:
+      - mysql
+    restart: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/timeSheetDevOps?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+    volumes:
+      - C:/logs:/logs
+    ports:
+      - "8089:8089"
+    networks:
+      - my-network
+  ## End - TimeSheetProject definition
+  ## Start - MySql database definition
+  ### $ mysql -uroot -h127.0.0.1 -p
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_DATABASE=timeSheetDevOps
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+      - MYSQL_ROOT_HOST=%
+    healthcheck:
+      test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: on-failure
+    networks:
+      - my-network
+  ## End - MySql database definition
+  ##Network to share access between containers
+networks:
+  my-network:
+    driver: bridge

@@ -116,13 +116,6 @@
 									<tag>${project.version}</tag>
 								</configuration>
 							</execution>
-							<execution>
-								<id>push-image</id>
-								<phase>deploy</phase>
-								<goals>
-									<goal>push</goal>
-								</goals>
-							</execution>
 						</executions>
 					</plugin>
 				</plugins>

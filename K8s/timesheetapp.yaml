@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timesheetapp-deployment
+  labels:
+    app: timesheetapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: timesheetapp
+  template:
+    metadata:
+      labels:
+        app: timesheetapp
+    spec:
+      containers:
+        - name: timesheetapp
+          image: kadgarspipe/timesheet:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8089
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: timesheet-secret
+                  key: mysql-user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: timesheet-secret
+                  key: mysql-password
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: timesheet-config
+                  key: mysql-url
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://${DB_URL}/timeSheetDevOps?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timesheetapp-service
+spec:
+  type: NodePort
+  selector:
+    app: timesheetapp
+  ports:
+    - protocol: TCP
+      port: 8089
+      targetPort: 8089
+      nodePort: 30100

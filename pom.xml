@@ -66,6 +66,7 @@
 							<IMAGE_NAME>${project.name}</IMAGE_NAME>
 							<MAINTAINER>MMS</MAINTAINER>
 						</buildArgAs>
+						<tag>v1.0</tag>
 					</configuration>
 				</plugin>
 				<!-- End - Of product dockerization -->
@@ -103,7 +104,7 @@
 									<goal>build</goal>
 								</goals>
 								<configuration>
-									<tag>latest</tag>
+									<tag>v1.0</tag>
 								</configuration>
 							</execution>
 						</executions>

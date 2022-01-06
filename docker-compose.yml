@@ -13,7 +13,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=pwd
     volumes:
-      - C:/logs:/logs
+      - ./containerlogs:/tmp/containerlogs
     ports:
       - "8089:8089"
     networks:
@@ -37,6 +37,8 @@ services:
       timeout: 5s
       retries: 10
     restart: on-failure
+    volumes:
+      - ./db-data:/var/lib/mysql/
     networks:
       - my-network
   ## End - MySql database definition
